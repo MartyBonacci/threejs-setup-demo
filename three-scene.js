@@ -2,6 +2,9 @@
 var width = window.innerWidth;
 var height = window.innerHeight;
 
+var gyroX = 0
+var gyroY = 0
+
 document.body.style.height = `${height}px`
 document.body.style.width = `${width}px`
 
@@ -65,7 +68,7 @@ var lambertBox = new THREE.Mesh(boxGeometry,lambertMaterial)
 scene.add(phongBox)
 scene.add(lambertBox)
 
-phongBox.rotation.set(0.4, 0.2, 0)
+// phongBox.rotation.set(0.4, 0.2, 0)
 lambertBox.rotation.set(0.4, 0.1, 0)
 
 lambertBox.position.x = 30
@@ -80,12 +83,41 @@ render = () => {
     requestAnimationFrame(render)
 
     // rotate phong box
-    phongBox.rotation.x += 0.004
-    phongBox.rotation.y += 0.002
+    // phongBox.rotation.x += 0.004
+    // phongBox.rotation.y += 0.002
+    phongBox.rotation.x = gyroX / 90
+    phongBox.rotation.y = gyroY / 45 // rotating twice as far as the limit - kind of jumpy
 
     renderer.render(scene, camera)
 }
 
 // run render function
 render();
+
+
+// set orientation
+handleOrientation = (event) => {
+
+    // get x angle -180 to 180
+    var x = event.beta
+    // get y angle -90 to 90
+    var y = event.gamma
+
+    // limit y rotation to -90 to 90
+    y = y > 90 ? 90 : y
+    y = y < -90 ? -90 : y
+
+    // limit x movement to -45 to 45
+    x = x > 45 ? 45 : x
+    x = x < -45 ? -45 : x
+
+    gyroX = x
+    gyroY = y
+
+}
+
+// listen for movement
+window.addEventListener('deviceorientation', handleOrientation);
+let acl = new Accelerometer({frequency: 60});
+acl.start();
 
