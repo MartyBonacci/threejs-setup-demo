@@ -33,6 +33,12 @@ scene.add(camera)
 
 // make a box
 var boxGeometry = new THREE.BoxGeometry(10, 15, 20)
+var glowBoxGeometry = new THREE.BoxGeometry(10.3, 15.3, 20.3)
+var glowBoxGeometry2 = new THREE.BoxGeometry(10.6, 15.6, 20.6)
+var glowBoxGeometry3 = new THREE.BoxGeometry(10.9, 15.9, 20.9)
+var glowBoxGeometry4 = new THREE.BoxGeometry(11.2, 16.2, 21.2)
+var glowBoxGeometry5 = new THREE.BoxGeometry(11.5, 16.5, 21.5)
+var glowBoxGeometry6 = new THREE.BoxGeometry(11.8, 16.8, 21.8)
 
 // make an orange material
 var basicMaterial = new THREE.MeshBasicMaterial({
@@ -58,16 +64,65 @@ var phongMaterial = new THREE.MeshPhongMaterial({
     color: 0xf26229,
 })
 
+var glowMaterial = new THREE.MeshPhongMaterial({
+    color: 0xf26229,
+    transparent: true,
+    opacity: .12,
+})
+
+var glowMaterial2 = new THREE.MeshPhongMaterial({
+    color: 0xf26229,
+    transparent: true,
+    opacity: .1,
+})
+
+var glowMaterial3 = new THREE.MeshPhongMaterial({
+    color: 0xf26229,
+    transparent: true,
+    opacity: .08,
+})
+
+var glowMaterial4 = new THREE.MeshPhongMaterial({
+    color: 0xf26229,
+    transparent: true,
+    opacity: .06,
+})
+
+var glowMaterial5 = new THREE.MeshPhongMaterial({
+    color: 0xf26229,
+    transparent: true,
+    opacity: .04,
+})
+
+var glowMaterial6 = new THREE.MeshPhongMaterial({
+    color: 0xf26229,
+    transparent: true,
+    opacity: .02,
+})
+
+
 // make lambert material
 var lambertMaterial = new THREE.MeshLambertMaterial({
     color: 0xf26229,
 })
 
 var phongBox = new THREE.Mesh(boxGeometry, phongMaterial)
+var glowBox = new THREE.Mesh(glowBoxGeometry, glowMaterial)
+var glowBox2 = new THREE.Mesh(glowBoxGeometry2, glowMaterial2)
+var glowBox3 = new THREE.Mesh(glowBoxGeometry3, glowMaterial3)
+var glowBox4 = new THREE.Mesh(glowBoxGeometry4, glowMaterial4)
+var glowBox5 = new THREE.Mesh(glowBoxGeometry5, glowMaterial5)
+var glowBox6 = new THREE.Mesh(glowBoxGeometry6, glowMaterial6)
 var lambertBox = new THREE.Mesh(boxGeometry,lambertMaterial)
 
 scene.add(phongBox)
 scene.add(lambertBox)
+scene.add(glowBox)
+scene.add(glowBox2)
+scene.add(glowBox3)
+scene.add(glowBox4)
+scene.add(glowBox5)
+scene.add(glowBox6)
 
 // phongBox.rotation.set(0.4, 0.2, 0)
 lambertBox.rotation.set(0.4, 0.1, 0)
@@ -89,6 +144,19 @@ render = () => {
     phongBox.rotation.x = gyroX / 90
     phongBox.rotation.y = gyroY / 90 // rotating twice as far as the limit - kind of jumpy
 
+    glowBox.rotation.x = gyroX / 90
+    glowBox.rotation.y = gyroY / 90
+    glowBox2.rotation.x = gyroX / 90
+    glowBox2.rotation.y = gyroY / 90
+    glowBox3.rotation.x = gyroX / 90
+    glowBox3.rotation.y = gyroY / 90
+    glowBox4.rotation.x = gyroX / 90
+    glowBox4.rotation.y = gyroY / 90
+    glowBox5.rotation.x = gyroX / 90
+    glowBox5.rotation.y = gyroY / 90
+    glowBox6.rotation.x = gyroX / 90
+    glowBox6.rotation.y = gyroY / 90
+
     renderer.render(scene, camera)
 }
 
@@ -104,15 +172,21 @@ handleOrientation = (event) => {
     // get y angle -90 to 90
     var y = event.gamma
 
+
+    y = x >= 90 ? -y : y
+
+    // limit y rotation to -90 to 90
+    y = y > 90 ? 90 : y
+    y = y < -90 ? -90 : y
+
+
     firstGyroX = firstGyroX || x
     x = x - firstGyroX
     // limit x movement to -45 to 45
     x = x > 89 ? 89 : x
     x = x < -45 ? -45 : x
 
-    // limit y rotation to -90 to 90
-    y = y > 90 ? 90 : y
-    y = y < -90 ? -90 : y
+
 
     gyroX = x
     gyroY = y
